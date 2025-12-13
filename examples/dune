@@ -1,12 +1,14 @@
 (executables
  (names
   shape_good
- )
+  lifecycle_good)
  (libraries shape_safe))
 
 (executables
  (names
   shape_bad
- )
+  lifecycle_bad_untrained_predict
+  lifecycle_bad_double_train
+  lifecycle_bad_validate_before_train)
  (libraries shape_safe)
  (enabled_if false))

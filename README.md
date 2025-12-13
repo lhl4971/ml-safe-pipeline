@@ -51,3 +51,64 @@ between neural network layers at compile time.
 - Layers can only be composed if their input/output dimensions match
 - Shape mismatch errors are detected at compile time
 - No runtime shape checks are required
+
+
+## Part 2 — Model Lifecycle and States
+
+This part demonstrates how the type system enforces the **correct lifecycle**
+of a machine learning model:
+
+Untrained → Trained → Validated
+
+Invalid state transitions are rejected at compile time.
+
+---
+
+### Relevant Files
+
+**Core implementation**
+- `src/model.ml`  
+  Model definition with phantom lifecycle states (`untrained`, `trained`, `validated`)
+  and a typed API enforcing valid state transitions.
+
+- `src/layer.ml`  
+  Used as the underlying, shape-safe architecture for the model.
+
+- `src/tensor.ml`  
+  Provides the typed tensor interface required for prediction.
+
+- `src/shape_safe.ml`  
+  Re-exports the model and related modules.
+
+---
+
+### Test / Example Files
+
+**Correct example (compiles successfully)**
+- `examples/lifecycle_good.ml`  
+  Demonstrates a valid workflow:
+  initialization → training → validation → prediction.
+
+**Incorrect examples (rejected at compile time)**
+
+- `examples/lifecycle_bad_untrained_predict.ml`  
+  Attempts to perform prediction on an untrained model.
+
+- `examples/lifecycle_bad_double_train.ml`  
+  Attempts to train a model that is already trained.
+
+- `examples/lifecycle_bad_validate_before_train.ml`  
+  Attempts to validate a model before it has been trained.
+
+Each incorrect example fails with a type error, demonstrating that
+the lifecycle invariants are enforced statically.
+
+---
+
+### What Is Guaranteed
+
+- Prediction is impossible on untrained models
+- Training can only occur once without an explicit reset
+- Validation is only allowed after training
+- Invalid lifecycle transitions are rejected at compile time
+
