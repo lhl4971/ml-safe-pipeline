@@ -124,3 +124,17 @@ let predict_validated
     (x : ('b, 'inp) Tensor.t)
   : ('b, 'out) Tensor.t =
   Layer.run m.arch x
+
+(*
+  Dataset-driven training.
+
+  Enforced invariants:
+    - only Train split can be used for training
+    - only Normalized data can be used for training
+*)
+let train_on
+    (d : (Dataset.train, Dataset.normalized, 'b, 'inp, 'out) Dataset.t)
+    (m : ('b, 'inp, 'out, untrained) t)
+  : ('b, 'inp, 'out, trained) t =
+  ignore d;
+  { m with name = m.name ^ "_trained_on_dataset" }

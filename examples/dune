@@ -1,7 +1,8 @@
 (executables
  (names
   shape_good
-  lifecycle_good)
+  lifecycle_good
+  dataset_good)
  (libraries shape_safe))
 
 (executables
@@ -9,6 +10,9 @@
   shape_bad
   lifecycle_bad_untrained_predict
   lifecycle_bad_double_train
-  lifecycle_bad_validate_before_train)
+  lifecycle_bad_validate_before_train
+  dataset_bad_train_on_test
+  dataset_bad_train_on_raw
+  dataset_bad_fit_norm_on_test)
  (libraries shape_safe)
- (enabled_if false))
+ (enabled_if true))

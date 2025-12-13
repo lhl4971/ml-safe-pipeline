@@ -112,3 +112,59 @@ the lifecycle invariants are enforced statically.
 - Validation is only allowed after training
 - Invalid lifecycle transitions are rejected at compile time
 
+
+## Part 3 — Type-Safe Datasets & Data Leakage Prevention
+
+This part demonstrates how the type system tracks dataset **splits** and **processing stages**
+to prevent common pipeline bugs and data leakage at compile time.
+
+---
+
+### Relevant Files
+
+**Core implementation**
+- `src/dataset.ml`  
+  Defines a parametrized dataset type using phantom types for:
+  - split: `train | valid | test`
+  - processing: `raw | normalized`  
+  Also defines typed operations such as loading, splitting, fitting normalization
+  parameters (Train-only), and applying normalization.
+
+- `src/model.ml`  
+  Adds a dataset-driven training API (e.g. `train_on`) that only accepts
+  `Train + Normalized` datasets.
+
+- `src/shape_safe.ml`  
+  Re-exports `Dataset` together with other modules.
+
+---
+
+### Test / Example Files
+
+**Correct example (compiles successfully)**
+- `examples/dataset_good.ml`  
+  Demonstrates a safe workflow:
+  - load Train/Test as Raw
+  - fit normalization only on Train Raw
+  - apply the fitted normalizer to Train/Test (Raw → Normalized)
+  - train the model only on Train Normalized
+
+**Incorrect examples (rejected at compile time)**
+- `examples/dataset_bad_train_on_test.ml`  
+  Attempts to train on `Test` data.
+
+- `examples/dataset_bad_train_on_raw.ml`  
+  Attempts to train on `Raw` (non-normalized) data.
+
+- `examples/dataset_bad_fit_norm_on_test.ml`  
+  Attempts to compute normalization parameters on non-Train data
+  (data leakage).
+
+---
+
+### What Is Guaranteed
+
+- Models can only be trained on `Train` data
+- Training requires `Normalized` data (Raw is rejected)
+- Normalization parameters can only be fitted on `Train` data (anti-leakage)
+- Invalid pipelines are rejected at compile time
