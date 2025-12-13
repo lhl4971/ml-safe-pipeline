@@ -1,0 +1,12 @@
+(executables
+ (names
+  shape_good
+ )
+ (libraries shape_safe))
+
+(executables
+ (names
+  shape_bad
+ )
+ (libraries shape_safe)
+ (enabled_if false))
