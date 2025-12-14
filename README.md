@@ -312,3 +312,70 @@ implicitly.
 
 - Origin labels are encoded as phantom types in a wrapper type.
 - Normal
+
+
+## Part 6 — Privacy-Aware Types
+
+This part demonstrates how privacy guarantees can be tracked at the type level
+using a simplified model of **differential privacy**.
+
+---
+
+### Core Idea
+
+Data is marked as either:
+
+- `Public`
+- `Private ε` — private data with a privacy budget `ε`
+
+The privacy budget is encoded in the type and updated explicitly by operations.
+Data cannot be released unless the privacy budget satisfies a safety threshold.
+
+---
+
+### Relevant Files
+
+**Core implementation**
+- `src/privacy.ml`  
+  Defines privacy-aware wrapper types and typed operations for:
+  - adding noise (consuming privacy budget)
+  - releasing data under a policy
+
+- `src/shape_safe.ml`  
+  Re-exports the `Privacy` module.
+
+---
+
+### Test / Example Files
+
+**Correct example (compiles successfully)**
+- `examples/privacy_good.ml`  
+  Demonstrates:
+  - adding noise multiple times
+  - tracking accumulated privacy budget
+  - successful release when the budget is within the allowed threshold
+  - unconditional release of public data
+
+**Incorrect example (rejected at compile time)**
+- `examples/privacy_bad_release.ml`  
+  Attempts to release private data whose privacy budget exceeds the allowed limit.
+
+---
+
+### What Is Guaranteed
+
+- Private data is always annotated with a privacy budget
+- Adding noise explicitly consumes privacy budget
+- Privacy budget is tracked across multiple operations
+- Private data cannot be released unless it satisfies the policy
+- Unsafe data release is rejected at compile time
+
+---
+
+### Real-World Context
+
+Differential privacy is used in real systems such as:
+
+- Google RAPPOR
+- Apple Differential Privacy
+- Federated learning with differential privacy

@@ -3,7 +3,8 @@
   shape_good
   lifecycle_good
   dataset_good
-  adv_good)
+  adv_good
+  privacy_good)
  (libraries shape_safe))
 
 (executables
@@ -16,6 +17,7 @@
   dataset_bad_train_on_raw
   dataset_bad_fit_norm_on_test
   adv_bad_train_on_adv
-  adv_bad_gen_from_adv)
+  adv_bad_gen_from_adv
+  privacy_bad_release)
  (libraries shape_safe)
- (enabled_if false))
+ (enabled_if true))
