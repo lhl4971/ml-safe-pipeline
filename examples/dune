@@ -20,4 +20,4 @@
   adv_bad_gen_from_adv
   privacy_bad_release)
  (libraries shape_safe)
- (enabled_if true))
+ (enabled_if false))
