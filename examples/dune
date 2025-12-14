@@ -2,7 +2,8 @@
  (names
   shape_good
   lifecycle_good
-  dataset_good)
+  dataset_good
+  adv_good)
  (libraries shape_safe))
 
 (executables
@@ -13,6 +14,8 @@
   lifecycle_bad_validate_before_train
   dataset_bad_train_on_test
   dataset_bad_train_on_raw
-  dataset_bad_fit_norm_on_test)
+  dataset_bad_fit_norm_on_test
+  adv_bad_train_on_adv
+  adv_bad_gen_from_adv)
  (libraries shape_safe)
- (enabled_if true))
+ (enabled_if false))
